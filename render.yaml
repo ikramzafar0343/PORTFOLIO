@@ -1,0 +1,9 @@
+services:
+  - type: static_site
+    name: ikramzafar-portfolio
+    env: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    pullRequestPreviewsEnabled: true
+
