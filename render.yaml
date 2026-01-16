@@ -1,9 +1,10 @@
 services:
-  - type: static_site
+  - type: web
     name: ikramzafar-portfolio
     env: static
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: dist
+    autoDeploy: true
     pullRequestPreviewsEnabled: true
 
