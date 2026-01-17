@@ -30,6 +30,48 @@ import { fadeUp, fadeIn, staggerContainer, buttonHover, cardHover, iconHover } f
 
 const Motion = motion
 
+function SkillBar({ Icon, percent, colorClass, shouldReduceMotion }) {
+  const [count, setCount] = useState(0)
+  const [started, setStarted] = useState(false)
+  return (
+    <Motion.div
+      className={`skill-line ${colorClass}`}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.3 }}
+      variants={fadeUp}
+      onViewportEnter={() => {
+        if (!started) {
+          setStarted(true)
+          const target = percent
+          const step = Math.max(1, Math.round(target / 30))
+          const id = setInterval(() => {
+            setCount((v) => {
+              const next = v + step
+              if (next >= target) {
+                clearInterval(id)
+                return target
+              }
+              return next
+            })
+          }, 16)
+        }
+      }}
+    >
+      <div className="skill-icon">{Icon && <Icon />}</div>
+      <div className="skill-bar">
+        <Motion.div
+          className="skill-fill"
+          initial={{ width: '0%' }}
+          animate={{ width: `${count}%` }}
+          transition={{ duration: shouldReduceMotion ? 0 : 0.2, ease: [0.22, 1, 0.36, 1] }}
+        />
+      </div>
+      <div className="skill-percent">{count}%</div>
+    </Motion.div>
+  )
+}
+
 const techIconMap = {
   react: FaReact,
   node: FaNodeJs,
@@ -405,120 +447,21 @@ function App() {
             <h2 className="section-title text-center">My Skills</h2>
             <div className="skills-grid">
               <div className="skills-column">
-                <div className="skill-line skill-html">
-                  <div className="skill-icon skill-icon-html">
-                    <FaHtml5 />
-                  </div>
-                  <div className="skill-dots">
-                    {Array.from({ length: 10 }).map((_, index) => (
-                      <span key={index} className="skill-dot" />
-                    ))}
-                  </div>
-                </div>
-                <div className="skill-line skill-css">
-                  <div className="skill-icon skill-icon-css">
-                    <FaCss3Alt />
-                  </div>
-                  <div className="skill-dots">
-                    {Array.from({ length: 10 }).map((_, index) => (
-                      <span key={index} className="skill-dot" />
-                    ))}
-                  </div>
-                </div>
-                <div className="skill-line skill-js">
-                  <div className="skill-icon skill-icon-js">
-                    <FaJsSquare />
-                  </div>
-                  <div className="skill-dots">
-                    {Array.from({ length: 10 }).map((_, index) => (
-                      <span key={index} className="skill-dot" />
-                    ))}
-                  </div>
-                </div>
-                <div className="skill-line skill-react">
-                  <div className="skill-icon skill-icon-react">
-                    <FaReact />
-                  </div>
-                  <div className="skill-dots">
-                    {Array.from({ length: 10 }).map((_, index) => (
-                      <span key={index} className="skill-dot" />
-                    ))}
-                  </div>
-                </div>
+                <SkillBar Icon={FaHtml5} label="HTML" percent={92} colorClass="skill-html" shouldReduceMotion={shouldReduceMotion} />
+                <SkillBar Icon={FaCss3Alt} label="CSS" percent={88} colorClass="skill-css" shouldReduceMotion={shouldReduceMotion} />
+                <SkillBar Icon={FaJsSquare} label="JavaScript" percent={84} colorClass="skill-js" shouldReduceMotion={shouldReduceMotion} />
+                <SkillBar Icon={FaReact} label="React" percent={86} colorClass="skill-react" shouldReduceMotion={shouldReduceMotion} />
               </div>
               <div className="skills-column">
-                <div className="skill-line skill-node">
-                  <div className="skill-icon skill-icon-node">
-                    <FaNodeJs />
-                  </div>
-                  <div className="skill-dots">
-                    {Array.from({ length: 10 }).map((_, index) => (
-                      <span key={index} className="skill-dot" />
-                    ))}
-                  </div>
-                </div>
-                <div className="skill-line skill-express">
-                  <div className="skill-icon skill-icon-express">
-                    <SiExpress />
-                  </div>
-                  <div className="skill-dots">
-                    {Array.from({ length: 10 }).map((_, index) => (
-                      <span key={index} className="skill-dot" />
-                    ))}
-                  </div>
-                </div>
-                <div className="skill-line skill-mongo">
-                  <div className="skill-icon skill-icon-mongo">
-                    <SiMongodb />
-                  </div>
-                  <div className="skill-dots">
-                    {Array.from({ length: 10 }).map((_, index) => (
-                      <span key={index} className="skill-dot" />
-                    ))}
-                  </div>
-                </div>
-                <div className="skill-line skill-git">
-                  <div className="skill-icon skill-icon-git">
-                    <FaGithub />
-                  </div>
-                  <div className="skill-dots">
-                    {Array.from({ length: 10 }).map((_, index) => (
-                      <span key={index} className="skill-dot" />
-                    ))}
-                  </div>
-                </div>
+                <SkillBar Icon={FaNodeJs} label="Node.js" percent={78} colorClass="skill-node" shouldReduceMotion={shouldReduceMotion} />
+                <SkillBar Icon={SiExpress} label="Express" percent={74} colorClass="skill-express" shouldReduceMotion={shouldReduceMotion} />
+                <SkillBar Icon={SiMongodb} label="MongoDB" percent={72} colorClass="skill-mongo" shouldReduceMotion={shouldReduceMotion} />
+                <SkillBar Icon={FaGithub} label="Git" percent={84} colorClass="skill-git" shouldReduceMotion={shouldReduceMotion} />
               </div>
               <div className="skills-column">
-                <div className="skill-line skill-python">
-                  <div className="skill-icon skill-icon-python">
-                    <SiPython />
-                  </div>
-                  <div className="skill-dots">
-                    {Array.from({ length: 10 }).map((_, index) => (
-                      <span key={index} className="skill-dot" />
-                    ))}
-                  </div>
-                </div>
-                <div className="skill-line skill-ai">
-                  <div className="skill-icon skill-icon-ai">
-                    <FaBrain />
-                  </div>
-                  <div className="skill-dots">
-                    {Array.from({ length: 10 }).map((_, index) => (
-                      <span key={index} className="skill-dot" />
-                    ))}
-                  </div>
-                </div>
-                <div className="skill-line skill-arvr">
-                  <div className="skill-icon skill-icon-arvr">
-                    <SiUnity />
-                  </div>
-                  <div className="skill-dots">
-                    {Array.from({ length: 10 }).map((_, index) => (
-                      <span key={index} className="skill-dot" />
-                    ))}
-                  </div>
-                </div>
+                <SkillBar Icon={SiPython} label="Python" percent={68} colorClass="skill-python" shouldReduceMotion={shouldReduceMotion} />
+                <SkillBar Icon={FaBrain} label="AI/ML" percent={62} colorClass="skill-ai" shouldReduceMotion={shouldReduceMotion} />
+                <SkillBar Icon={SiUnity} label="AR/VR" percent={58} colorClass="skill-arvr" shouldReduceMotion={shouldReduceMotion} />
               </div>
             </div>
           </div>
